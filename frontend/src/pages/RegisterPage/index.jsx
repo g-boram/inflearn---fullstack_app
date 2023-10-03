@@ -1,13 +1,47 @@
 // Register - 회원가입 페이지 
+// react-hook-form
+
+import { useForm } from 'react-hook-form';
 
 const RegisterPage = () => {
+
+  const {  
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({ mode: 'onChange' })
+
+  // submit 버튼 클릭시 
+  const onSubmit = ({ email, password, name }) => {
+    console.log(email, password, name)
+    reset();
+  }
+
+  // 유효성 검사
+  const userEmail = {
+    required: '필수 필드입니다.'
+  }
+  const userName = {
+    required: '필수 필드입니다.'
+  }
+  const userPassword = {
+    required: '필수 필드입니다.',
+    minLength: {
+      value: 6,
+      message: '최소 6자 입니다.'
+    }
+  }
+
+
+
   return (
     <section className='flex flex-col justify-center mt-20 max-w-[400px] m-auto'>
       <div className='p-6 bg-white rounded-md shadow-md'>
         <h1>
           회원가입 / RegisterPage
         </h1>
-        <form className="mt-6">
+        <form className="mt-6" onSubmit={handleSubmit(onSubmit)}>
           {/* Email */}
           <div className="mb-2">
             <label
@@ -18,7 +52,16 @@ const RegisterPage = () => {
               type='email'
               id='email'
               className="w-full px-4 py-2 mt-2 bg-white border rounded-md"
+              { ...register('email', userEmail)}
             />
+            {
+              errors?.email &&
+              <div>
+                <span className='text-red-500'>
+                  {errors.email.message}
+                </span>
+              </div>
+            }
           </div>
           {/* Name */}
           <div className="mb-2">
@@ -30,7 +73,16 @@ const RegisterPage = () => {
               type='text'
               id='name'
               className="w-full px-4 py-2 mt-2 bg-white border rounded-md"
+              { ...register('name', userName)}
             />
+            {
+              errors?.name &&
+              <div>
+                <span className='text-red-500'>
+                  {errors.name.message}
+                </span>
+              </div>
+            }
           </div>
           {/* Password */}
           <div className="mb-2">
@@ -42,7 +94,16 @@ const RegisterPage = () => {
               type='password'
               id='password'
               className="w-full px-4 py-2 mt-2 bg-white border rounded-md"
+              { ...register('password', userPassword)}
             />
+            {
+              errors?.password &&
+              <div>
+                <span className='text-red-500'>
+                  {errors.password.message}
+                </span>
+              </div>
+            }
           </div>
 
           <div className='mt-6'>
